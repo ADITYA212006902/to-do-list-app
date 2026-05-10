@@ -1,9 +1,21 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dynamic To-Do List</title>
+  <!-- Basic Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="A simple and dynamic To-Do List application built using HTML, CSS, and JavaScript with DOM manipulation.">
+  <meta name="keywords" content="To-Do List, JavaScript Project, HTML, CSS, DOM Manipulation, Task Manager">
+  <meta name="author" content="Aditya">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Dynamic To-Do List App">
+  <meta property="og:description" content="Manage your daily tasks with this dynamic To-Do List application.">
+  <meta property="og:type" content="website">
+
+  <title>Dynamic To-Do List App</title>
 
   <style>
     *{
@@ -14,25 +26,38 @@
     }
 
     body{
-      background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+      background-color: #f4f4f4;
+      color: #333;
+      line-height: 1.6;
     }
 
-    .container{
+    header{
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main{
+      max-width: 700px;
+      margin: 30px auto;
       background: white;
       padding: 25px;
-      width: 400px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    section{
+      margin-bottom: 20px;
     }
 
     h1{
-      text-align: center;
-      margin-bottom: 20px;
-      color: #333;
+      margin-bottom: 10px;
+    }
+
+    h2{
+      margin-bottom: 10px;
+      color: #007bff;
     }
 
     .input-section{
@@ -41,29 +66,25 @@
       margin-bottom: 20px;
     }
 
-    #taskInput{
+    input{
       flex: 1;
       padding: 10px;
       border: 2px solid #ddd;
-      border-radius: 6px;
+      border-radius: 5px;
       font-size: 16px;
     }
 
     button{
       padding: 10px 15px;
       border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    #addBtn{
-      background: #007bff;
+      background-color: #007bff;
       color: white;
+      border-radius: 5px;
+      cursor: pointer;
     }
 
-    #addBtn:hover{
-      background: #0056b3;
+    button:hover{
+      background-color: #0056b3;
     }
 
     ul{
@@ -77,13 +98,20 @@
       background: #f9f9f9;
       padding: 12px;
       margin-bottom: 10px;
-      border-radius: 6px;
-      transition: 0.3s;
+      border-radius: 5px;
     }
 
-    li.completed span{
+    .completed{
       text-decoration: line-through;
       color: gray;
+    }
+
+    footer{
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+      background: #222;
+      color: white;
     }
 
     .task-buttons{
@@ -91,75 +119,107 @@
       gap: 8px;
     }
 
-    .complete-btn{
-      background: green;
-      color: white;
-    }
-
     .delete-btn{
       background: red;
-      color: white;
-    }
-
-    .complete-btn:hover{
-      background: darkgreen;
     }
 
     .delete-btn:hover{
       background: darkred;
     }
+
+    .complete-btn{
+      background: green;
+    }
+
+    .complete-btn:hover{
+      background: darkgreen;
+    }
   </style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>To-Do List</h1>
+  <!-- Header -->
+  <header>
+    <h1>Dynamic To-Do List Application</h1>
+    <p>Manage your daily tasks efficiently</p>
+  </header>
 
-    <div class="input-section">
-      <input type="text" id="taskInput" placeholder="Enter a task">
-      <button id="addBtn">Add</button>
-    </div>
+  <!-- Main Content -->
+  <main>
 
-    <ul id="taskList"></ul>
-  </div>
+    <!-- About Section -->
+    <section aria-labelledby="about-heading">
+      <h2 id="about-heading">About This Project</h2>
+      <p>
+        This To-Do List application allows users to add, complete,
+        and delete tasks dynamically using JavaScript and DOM manipulation.
+      </p>
+    </section>
+
+    <!-- Task Manager Section -->
+    <section aria-labelledby="task-heading">
+      <h2 id="task-heading">Task Manager</h2>
+
+      <div class="input-section">
+        <label for="taskInput" class="visually-hidden">Enter Task</label>
+
+        <input
+          type="text"
+          id="taskInput"
+          placeholder="Enter a new task"
+          aria-label="Task Input"
+        >
+
+        <button id="addBtn" aria-label="Add Task">
+          Add Task
+        </button>
+      </div>
+
+      <!-- Task List -->
+      <ul id="taskList" aria-live="polite"></ul>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 Dynamic To-Do List App | Built with HTML, CSS & JavaScript</p>
+  </footer>
 
   <script>
-    // Select elements
     const taskInput = document.getElementById("taskInput");
     const addBtn = document.getElementById("addBtn");
     const taskList = document.getElementById("taskList");
 
-    // Add task function
     function addTask() {
       const taskText = taskInput.value.trim();
 
-      // Prevent empty task
       if (taskText === "") {
         alert("Please enter a task!");
         return;
       }
 
-      // Create list item
+      // Create Task Item
       const li = document.createElement("li");
 
-      // Create task text
       const span = document.createElement("span");
       span.textContent = taskText;
 
-      // Create button container
+      // Button Container
       const buttonDiv = document.createElement("div");
       buttonDiv.classList.add("task-buttons");
 
-      // Complete button
+      // Complete Button
       const completeBtn = document.createElement("button");
       completeBtn.textContent = "Complete";
       completeBtn.classList.add("complete-btn");
 
       completeBtn.addEventListener("click", () => {
-        li.classList.toggle("completed");
+        span.classList.toggle("completed");
       });
 
-      // Delete button
+      // Delete Button
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "Delete";
       deleteBtn.classList.add("delete-btn");
@@ -168,26 +228,20 @@
         li.remove();
       });
 
-      // Append buttons
       buttonDiv.appendChild(completeBtn);
       buttonDiv.appendChild(deleteBtn);
 
-      // Append elements to li
       li.appendChild(span);
       li.appendChild(buttonDiv);
 
-      // Append li to task list
       taskList.appendChild(li);
 
-      // Clear input field
       taskInput.value = "";
     }
 
-    // Add task on button click
     addBtn.addEventListener("click", addTask);
 
-    // Add task on Enter key
-    taskInput.addEventListener("keypress", function(event) {
+    taskInput.addEventListener("keypress", (event) => {
       if (event.key === "Enter") {
         addTask();
       }
